@@ -14,6 +14,7 @@ public class GameTest {
 		List<Location> positions = locations();
 		RenderingStrategy rg = new MatrixRenderingStrategy(3, 3);
 		Game game = new Game(positions, rg);
+		game.open(postion(3,3));
 		game.flag(postion(0,0));
 		game.open(postion(0,1));
 		game.open(postion(0,2));
