@@ -14,7 +14,8 @@ Flag
 ----
 Flaps a postion, game woulod be over if you flag a safe location
 
-``` Opening explosive location
+``` 
+Opening explosive location
 --------------
 
 Game Initilized
@@ -25,7 +26,8 @@ Game Over!!! You have blown explosive!!
 
 ```
 
-``` Game Moves
+``` 
+Game Moves
 --------------
 Game Initilized
 XXX
