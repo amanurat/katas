@@ -1,7 +1,5 @@
 package com.nadeem.app.kata;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +18,10 @@ public class GameTest {
 		game.open(postion(0,2));
 		game.flag(postion(1,0));		
 		game.open(postion(2,2));
+		game.open(postion(2,1));
+		game.flag(postion(2,0));
+		game.open(postion(1,2));
+		game.open(postion(1,1));
 	}
 
 	private List<Location> locations() {

@@ -26,6 +26,7 @@ public class Game {
 
 	private void doOpenValidPosition(Position position, Location location) {
 		if (location.explosive()) {
+			location.markExploded();
 			throw new IllegalStateException("Game Over!!! You have blown explosive");
 		}
 		location.markOpened();
@@ -44,9 +45,10 @@ public class Game {
 
 	private void doFlagValidPosition(Position position, Location location) {
 		if (location.safe()) {
-			throw new IllegalStateException("Game Over! You opened non explosive location");
+			location.markInvlid();
+			throw new IllegalStateException("Game Over! You Flagged Invalid location");
 		}
-		location.markOpened();
+		location.markFlagged();
 		this.renderingStrategy.render("Flagging Position " + position);
 		this.renderingStrategy.render(this.locations);
 	}

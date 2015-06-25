@@ -27,7 +27,7 @@ public class MatrixRenderingStrategy implements RenderingStrategy {
 	}
 
 	private String data(Location location) {
-		return location.isOpened() ? "O" : "X";
+		return location.statusCode();
 	}
 
 	public void render(String string) {
