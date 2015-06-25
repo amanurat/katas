@@ -3,15 +3,25 @@ package com.nadeem.app.kata;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class GameTest {
 
+	private Game game;
+
+	@Before
+	public void doBeforeEachTestCase() {
+		System.out.println("\n\n");
+		game = new Game(locations(), new MatrixRenderingStrategy(3, 3));
+	}
+	@Test(expected = IllegalStateException.class)
+	public void testGameOver() {
+		game.open(postion(2,0));
+	}
+
 	@Test
-	public void test() {
-		List<Location> positions = locations();
-		RenderingStrategy rg = new MatrixRenderingStrategy(3, 3);
-		Game game = new Game(positions, rg);
+	public void testMoves() {
 		game.open(postion(3,3));
 		game.flag(postion(0,0));
 		game.open(postion(0,1));
@@ -61,7 +71,7 @@ public class GameTest {
 		}
 		@Override
 		public String toString() {
-			return String.format("(%s, %s)", x, y);
+			return String.format("Position(%s, %s)", x, y);
 		}
 	}
 
