@@ -1,7 +1,5 @@
 package com.nadeem.app.kata;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +19,7 @@ public class ConferencePlannerTest {
 		Talk six = new Talk("six", 120);
 		Talk seven = new Talk("seven", 120);
 		Talk eight = new Talk("eight", 120);
-		
+
 		talks.add(one);
 		talks.add(two);
 		talks.add(three);
@@ -34,6 +32,8 @@ public class ConferencePlannerTest {
 		ConferencePlanner planner = ConferencePlanner.conference("Test");
 		Conference conference = planner.build(new Date(), 2, talks);
 		for (Track track : conference.getTracks()) {
+			System.out.println(track.getName() + " : " + DateTimeUtil.getDayString(track.getDate()));
+			System.out.println("=============");
 			for (Session session : track.getSessions()) {
 				System.out.println(session.getName() + session.getStart());
 				for (Talk talk : session.getTalks()) {

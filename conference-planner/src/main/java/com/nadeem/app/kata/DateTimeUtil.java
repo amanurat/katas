@@ -30,4 +30,8 @@ public class DateTimeUtil {
 	public static String getHourMinuteString(Date dateTime) {
 		return new SimpleDateFormat("H:mm").format(dateTime);
 	}
+
+	public static String getDayString(Date dateTime) {
+		return new SimpleDateFormat("yyyy-MM-dd").format(dateTime);
+	}
 }

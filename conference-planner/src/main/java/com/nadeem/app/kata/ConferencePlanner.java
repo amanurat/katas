@@ -17,31 +17,35 @@ public class ConferencePlanner {
 	}
 
 	public Conference build(Date start, int numberOfTracksPerDay, List<Talk> talks) {
-		Track track = new Track("Track 1", start);
 
-		Session morningSession = new Session("Morning Session", DateTimeUtil.with(start, 9, 0), 180);
-		addTalks(talks, morningSession);
-		track.addSession(morningSession);
+		for (int i = 0; i < numberOfTracksPerDay; i++) {
+			Date trackDate =  DateTimeUtil.with(start, 9, 0);
+			Track track = new Track("Track " + i, trackDate);
 
-		Session lunchSession = new Session("Lunch Session", DateTimeUtil.with(start, 12, 0), 60);
-		lunchSession.add("Lunch", 60);
-		track.addSession(lunchSession);
+			Session morningSession = new Session("Morning Session", DateTimeUtil.with(trackDate, 9, 0), 180);
+			addTalks(talks, morningSession);
+			track.addSession(morningSession);
 
-		Session afterNoonSession = new Session("Afternoon Session", DateTimeUtil.with(start, 13, 0), 240);
-		addTalks(talks, afterNoonSession);
-		track.addSession(afterNoonSession);
+			Session lunchSession = new Session("Lunch Session", DateTimeUtil.with(trackDate, 12, 0), 60);
+			lunchSession.add("Lunch", 60);
+			track.addSession(lunchSession);
 
-		Date eveningSessionDate = DateTimeUtil.with(start, 16, 0);
-		Date endDate = afterNoonSession.getEndTime();
-		if (endDate.after(DateTimeUtil.with(start, 16, 0))) {
-			eveningSessionDate = DateTimeUtil.with(start, 17, 0);
+			Session afterNoonSession = new Session("Afternoon Session", DateTimeUtil.with(trackDate, 13, 0), 240);
+			addTalks(talks, afterNoonSession);
+			track.addSession(afterNoonSession);
+
+			Date eveningSessionDate = DateTimeUtil.with(trackDate, 16, 0);
+			Date endDate = afterNoonSession.getEndTime();
+			if (endDate.after(DateTimeUtil.with(trackDate, 16, 0))) {
+				eveningSessionDate = DateTimeUtil.with(trackDate, 17, 0);
+			}
+
+			Session eveningSession = new Session("Evening Session", eveningSessionDate, 60);
+			eveningSession.add("Networking Event", 60);
+			track.addSession(eveningSession);
+
+			this.conference.addTrack(track);
 		}
-
-		Session eveningSession = new Session("Evening Session", eveningSessionDate, 60);
-		eveningSession.add("Networking Event", 60);
-		track.addSession(eveningSession);
-
-		this.conference.addTrack(track);
 
 		return this.conference;
 	}

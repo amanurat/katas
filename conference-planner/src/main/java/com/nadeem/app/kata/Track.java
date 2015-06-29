@@ -27,4 +27,8 @@ public class Track {
 	public List<Session> getSessions() {
 		return this.sessions;
 	}
+	
+	public Date getDate() {
+		return this.date;
+	}
 }
