@@ -30,7 +30,7 @@ public class ConferencePlannerTest {
 		talks.add(eight);
 
 		ConferencePlanner planner = ConferencePlanner.conference("Test");
-		Conference conference = planner.build(new Date(), 1, talks);
+		Conference conference = planner.build(new Date(), 2, talks);
 		System.out.println("Confrence : " + conference.getName());
 		for (Track track : conference.getTracks()) {
 			System.out.println(track.getName() + " : " + DateTimeUtil.getDayString(track.getDate()));

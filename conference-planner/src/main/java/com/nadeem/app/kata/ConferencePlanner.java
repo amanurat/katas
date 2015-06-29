@@ -6,6 +6,10 @@ import java.util.List;
 
 public class ConferencePlanner {
 
+	private static final int DURATION_FOUR_HOURS = 240;
+	private static final int DURATION_THREE_HOURS = 180;
+	private static final int DURATION_ONE_HOUR = 60;
+
 	private Conference conference;
 
 	private ConferencePlanner(String name) {
@@ -22,7 +26,7 @@ public class ConferencePlanner {
 
 		while (!talks.isEmpty()) {
 			for (int i = 0; i < numberOfTracksPerDay; i++) {
-				Date trackDate =  DateTimeUtil.with(confDate, 9, 0);
+				Date trackDate =  nineAM(confDate);
 				Track track = new Track("Track " + i, trackDate);
 
 				buildMorningSession(talks, trackDate, track);
@@ -39,39 +43,29 @@ public class ConferencePlanner {
 		return this.conference;
 	}
 
-	private void buildEveningSession(Track track, Date eveningSessionDate) {
-		Session eveningSession = new Session("Evening Session", eveningSessionDate, 60);
-		eveningSession.add("Networking Event", 60);
-		track.addSession(eveningSession);
+	private void buildMorningSession(List<Talk> talks, Date trackDate, Track track) {
+		Session morningSession = new Session("Morning Session", nineAM(trackDate), DURATION_THREE_HOURS);
+		addTalks(talks, morningSession);
+		track.addSession(morningSession);
+	}
+
+	private void buildLunchSession(Date trackDate, Track track) {
+		Session lunchSession = new Session("Lunch Session", afterNoon(trackDate), DURATION_ONE_HOUR);
+		lunchSession.add("Lunch", 60);
+		track.addSession(lunchSession);
 	}
 
 	private Session buildAfterNoonSession(List<Talk> talks, Date trackDate, Track track) {
-		Session afterNoonSession = new Session("Afternoon Session", DateTimeUtil.with(trackDate, 13, 0), 240);
+		Session afterNoonSession = new Session("Afternoon Session", onePM(trackDate), DURATION_FOUR_HOURS);
 		addTalks(talks, afterNoonSession);
 		track.addSession(afterNoonSession);
 		return afterNoonSession;
 	}
 
-	private void buildLunchSession(Date trackDate, Track track) {
-		Session lunchSession = new Session("Lunch Session", DateTimeUtil.with(trackDate, 12, 0), 60);
-		lunchSession.add("Lunch", 60);
-		track.addSession(lunchSession);
-	}
-
-	private void buildMorningSession(List<Talk> talks, Date trackDate,
-			Track track) {
-		Session morningSession = new Session("Morning Session", DateTimeUtil.with(trackDate, 9, 0), 180);
-		addTalks(talks, morningSession);
-		track.addSession(morningSession);
-	}
-
-	private Date eveningSessionDate(Date trackDate, Session afterNoonSession) {
-		Date eveningSessionDate = DateTimeUtil.with(trackDate, 16, 0);
-		Date endDate = afterNoonSession.getEndTime();
-		if (endDate.after(DateTimeUtil.with(trackDate, 16, 0))) {
-			eveningSessionDate = DateTimeUtil.with(trackDate, 17, 0);
-		}
-		return eveningSessionDate;
+	private void buildEveningSession(Track track, Date eveningSessionDate) {
+		Session eveningSession = new Session("Evening Session", eveningSessionDate, DURATION_ONE_HOUR);
+		eveningSession.add("Networking Event", 60);
+		track.addSession(eveningSession);
 	}
 
 	private void addTalks(List<Talk> talks, Session morningSession) {
@@ -82,8 +76,37 @@ public class ConferencePlanner {
 				iterator.remove();
 
 			} catch (IllegalArgumentException e) {
-				// TODO: handle exception
+				// Just Ignore
 			}
 		}
+	}
+
+	private Date eveningSessionDate(Date trackDate, Session afterNoonSession) {
+		Date eveningSessionDate = fourPM(trackDate);
+		Date endDate = afterNoonSession.getEndTime();
+		if (endDate.after(fourPM(trackDate))) {
+			eveningSessionDate = fivePM(trackDate);
+		}
+		return eveningSessionDate;
+	}
+
+	private Date nineAM(Date confDate) {
+		return DateTimeUtil.with(confDate, 9, 0);
+	}
+
+	private Date onePM(Date trackDate) {
+		return DateTimeUtil.with(trackDate, 13, 0);
+	}
+
+	private Date fivePM(Date trackDate) {
+		return DateTimeUtil.with(trackDate, 17, 0);
+	}
+
+	private Date fourPM(Date trackDate) {
+		return DateTimeUtil.with(trackDate, 16, 0);
+	}
+
+	private Date afterNoon(Date trackDate) {
+		return DateTimeUtil.with(trackDate, 12, 0);
 	}
 }

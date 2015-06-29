@@ -21,7 +21,6 @@ public class Talks implements Iterable<Talk> {
 			}			
 		};
 	}
-
 	
 	public void addTalk(String name, int duration) {
 		this.talks.add(new Talk(name, duration));
