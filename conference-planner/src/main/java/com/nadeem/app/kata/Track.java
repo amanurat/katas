@@ -2,6 +2,7 @@ package com.nadeem.app.kata;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class Track {
@@ -23,12 +24,14 @@ public class Track {
 	public String getName() {
 		return this.name;
 	}
-	
-	public List<Session> getSessions() {
-		return this.sessions;
-	}
-	
+
 	public Date getDate() {
 		return this.date;
+	}
+
+	public void forEachSession(Action<Session> action) {
+		for (Iterator<Session> iterator = sessions.iterator(); iterator.hasNext();) {
+			action.call(iterator.next());			
+		}
 	}
 }

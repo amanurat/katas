@@ -2,6 +2,7 @@ package com.nadeem.app.kata;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class Session {
@@ -42,12 +43,14 @@ public class Session {
 		return this.name;
 	}
 	
-	public List<Talk> getTalks() {
-		return this.talks;
-	}
-	
 	public Date getStart() {
 		return this.start;
+	}
+
+	public void forEachTalk(Action<Talk> action) {
+		for (Iterator<Talk> iterator = talks.iterator(); iterator.hasNext();) {
+			action.call(iterator.next());			
+		}
 	}
 
 }

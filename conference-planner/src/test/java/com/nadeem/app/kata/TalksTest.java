@@ -1,10 +1,13 @@
 package com.nadeem.app.kata;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.nadeem.app.kata.Talks.AddAndBuildStep;
 
 public class TalksTest {
 	
@@ -12,11 +15,13 @@ public class TalksTest {
 
 	@Before
 	public void doBeforeEachTestCase() {
-		talks = new Talks();
-		talks.addTalk("Two", 2);
-		talks.addTalk("Four", 4);
-		talks.addTalk("One", 1);		
-		talks.addTalk("Six", 6);
+		
+		AddAndBuildStep addTalk = Talks.builder();
+
+		addTalk.add("Two", 2);
+		addTalk.add("Four", 4);
+		addTalk.add("One", 1);		
+		this.talks = addTalk.addAndBuild("Six", 6);
 	}
 
 	@Test

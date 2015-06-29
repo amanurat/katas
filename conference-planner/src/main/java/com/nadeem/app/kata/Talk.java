@@ -20,7 +20,6 @@ public class Talk {
 	public int getDuration() {
 		return duration;
 	}
-	
 
 	public String getName() {
 		return name;

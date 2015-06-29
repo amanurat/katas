@@ -1,6 +1,7 @@
 package com.nadeem.app.kata;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Conference {
@@ -20,8 +21,10 @@ public class Conference {
 	public String getName() {
 		return this.name;
 	}
-	
-	public List<Track> getTracks() {
-		return this.tracks;
+
+	public void forEachTrack(Action<Track> action) {
+		for (Iterator<Track> iterator = tracks.iterator(); iterator.hasNext();) {
+			action.call(iterator.next());			
+		}
 	}
 }
