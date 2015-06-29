@@ -8,113 +8,155 @@ public class ConferencePlanner {
 	private static final int DURATION_THREE_HOURS = 180;
 	private static final int DURATION_ONE_HOUR = 60;
 
-	private Conference conference;
+	private ConferencePlanner() {
 
-	private ConferencePlanner(String name) {
-		this.conference =  new Conference(name);
 	}
 
-	public static ConferencePlanner conference(String name) {
-		return new ConferencePlanner(name);
+	public static NameStep planner() {
+		return new Steps();
 	}
 
-	public Conference build(Date start, int numberOfTracksPerDay, Talks talks) {
-
-		Date confDate = (Date) start.clone();
-
-		while (talks.enoughAvailable()) {
-			for (int i = 0; i < numberOfTracksPerDay; i++) {
-				Date trackDate =  atNineAM(confDate);
-				Track track = new Track("Track " + i, trackDate);
-
-				addMorningSession(track, talks, trackDate);
-				addLunchSession(track, trackDate);
-				Session afterNoonSession = addAfterNoonSession(track, talks, trackDate);
-				Date eveningSessionDate = eveningSessionDate(trackDate, afterNoonSession);
-				addEveningSession(track, eveningSessionDate);
-
-				this.conference.addTrack(track);
-			}
-			confDate = DateTimeUtil.getNextDay(confDate);
-		}		
-
-		return this.conference;
+	public static interface NameStep {
+		StartDateStep name(String confrenceName);
 	}
 
-	private Session addMorningSession(Track track, Talks talks, Date trackDate) {
-		Session session = new Session("Morning Session", atNineAM(trackDate), DURATION_THREE_HOURS);
-		addTalks(talks, session);
-		track.addSession(session);
-		return session;
+	public static interface StartDateStep {
+		TrackStep startDate(Date date);
+	}
+	public static interface TrackStep {
+		TalksStep trackCountPerDay(int trackCountPerDay);
+	}
+	public static interface TalksStep {
+		BuildStep talks(Talks talks);
+	}
+	public static interface BuildStep {
+		Conference build();
 	}
 
-	private Session addLunchSession(Track track, Date trackDate) {
-		Session session = new Session("Lunch Session", atAfterNoon(trackDate), DURATION_ONE_HOUR);
-		session.add("Lunch", 60);
-		track.addSession(session);
-		return session;
-	}
+	private static class Steps implements NameStep, StartDateStep, TrackStep, TalksStep, BuildStep {
 
-	private Session addAfterNoonSession(Track track, Talks talks, Date trackDate) {
-		Session session = new Session("Afternoon Session", atOnePM(trackDate), DURATION_FOUR_HOURS);
-		addTalks(talks, session);
-		track.addSession(session);
-		return session;
-	}
+		private String name;
+		private int trackCountPerDay;
+		private Date startDate;
+		private Talks talks;
 
-	private Session addEveningSession(Track track, Date eveningSessionDate) {
-		Session session = new Session("Evening Session", eveningSessionDate, DURATION_ONE_HOUR);
-		session.add("Networking Event", 60);
-		track.addSession(session);
-		return session;
-	}
-
-	private void addTalks(Talks talks, final Session session) {
-
-		talks.assign(new ResposiveAction<Talk>() {
-
-			public void call(Talk talk) {
-				session.add(talk.getName(), talk.getDuration());				
-			}
-
-			public void onException(Exception exception) {
-				if (!shouldIgnore(exception)) {
-					throw new RuntimeException(exception);
-				}				
-			}
-
-			private boolean shouldIgnore(Exception exception) {
-				return exception instanceof IllegalArgumentException;
-			}
-		});		
-	}
-
-	private Date eveningSessionDate(Date trackDate, Session afterNoonSession) {
-		Date eveningSessionDate = fourPM(trackDate);
-		Date endDate = afterNoonSession.getEndTime();
-		if (endDate.after(fourPM(trackDate))) {
-			eveningSessionDate = fivePM(trackDate);
+		public BuildStep talks(Talks talks) {
+			this.talks = talks;
+			return this;
 		}
-		return eveningSessionDate;
-	}
 
-	private Date atNineAM(Date confDate) {
-		return DateTimeUtil.with(confDate, 9, 0);
-	}
+		public TalksStep trackCountPerDay(int trackCountPerDay) {
+			this.trackCountPerDay = trackCountPerDay;
+			return this;
+		}
 
-	private Date atOnePM(Date trackDate) {
-		return DateTimeUtil.with(trackDate, 13, 0);
-	}
+		public TrackStep startDate(Date date) {
+			this.startDate = date;
+			return this;
+		}
 
-	private Date fivePM(Date trackDate) {
-		return DateTimeUtil.with(trackDate, 17, 0);
-	}
+		public StartDateStep name(String confrenceName) {
+			this.name = confrenceName;
+			return this;
+		}
 
-	private Date fourPM(Date trackDate) {
-		return DateTimeUtil.with(trackDate, 16, 0);
-	}
+		public Conference build() {
+			Date confDate = startDate;
+			Conference conference = new Conference(this.name);
+			while (talks.enoughAvailable()) {
+				for (int i = 0; i < trackCountPerDay; i++) {
+					Date trackDate =  atNineAM(confDate);
+					Track track = new Track("Track " + i, trackDate);
 
-	private Date atAfterNoon(Date trackDate) {
-		return DateTimeUtil.with(trackDate, 12, 0);
-	}
+					addMorningSession(track, talks, trackDate);
+					addLunchSession(track, trackDate);
+					Session afterNoonSession = addAfterNoonSession(track, talks, trackDate);
+					Date eveningSessionDate = eveningSessionDate(trackDate, afterNoonSession);
+					addEveningSession(track, eveningSessionDate);
+
+					conference.addTrack(track);
+				}
+				confDate = DateTimeUtil.getNextDay(confDate);
+			}		
+
+			return conference;
+		}
+		
+		private Session addMorningSession(Track track, Talks talks, Date trackDate) {
+			Session session = new Session("Morning Session", atNineAM(trackDate), DURATION_THREE_HOURS);
+			addTalks(talks, session);
+			track.addSession(session);
+			return session;
+		}
+
+		private Session addLunchSession(Track track, Date trackDate) {
+			Session session = new Session("Lunch Session", atAfterNoon(trackDate), DURATION_ONE_HOUR);
+			session.add("Lunch", 60);
+			track.addSession(session);
+			return session;
+		}
+
+		private Session addAfterNoonSession(Track track, Talks talks, Date trackDate) {
+			Session session = new Session("Afternoon Session", atOnePM(trackDate), DURATION_FOUR_HOURS);
+			addTalks(talks, session);
+			track.addSession(session);
+			return session;
+		}
+
+		private static Session addEveningSession(Track track, Date eveningSessionDate) {
+			Session session = new Session("Evening Session", eveningSessionDate, DURATION_ONE_HOUR);
+			session.add("Networking Event", 60);
+			track.addSession(session);
+			return session;
+		}
+
+		private static void addTalks(Talks talks, final Session session) {
+
+			talks.assign(new ResposiveAction<Talk>() {
+
+				public void call(Talk talk) {
+					session.add(talk.getName(), talk.getDuration());				
+				}
+
+				public void onException(Exception exception) {
+					if (!shouldIgnore(exception)) {
+						throw new RuntimeException(exception);
+					}				
+				}
+
+				private boolean shouldIgnore(Exception exception) {
+					return exception instanceof IllegalArgumentException;
+				}
+			});		
+		}
+
+		private Date eveningSessionDate(Date trackDate, Session afterNoonSession) {
+			Date eveningSessionDate = fourPM(trackDate);
+			Date endDate = afterNoonSession.getEndTime();
+			if (endDate.after(fourPM(trackDate))) {
+				eveningSessionDate = fivePM(trackDate);
+			}
+			return eveningSessionDate;
+		}
+
+		private Date atNineAM(Date confDate) {
+			return DateTimeUtil.with(confDate, 9, 0);
+		}
+
+		private Date atOnePM(Date trackDate) {
+			return DateTimeUtil.with(trackDate, 13, 0);
+		}
+
+		private Date fivePM(Date trackDate) {
+			return DateTimeUtil.with(trackDate, 17, 0);
+		}
+
+		private Date fourPM(Date trackDate) {
+			return DateTimeUtil.with(trackDate, 16, 0);
+		}
+
+		private Date atAfterNoon(Date trackDate) {
+			return DateTimeUtil.with(trackDate, 12, 0);
+		}
+	}		
 }

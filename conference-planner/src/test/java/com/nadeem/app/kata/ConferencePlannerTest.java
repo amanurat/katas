@@ -27,10 +27,15 @@ public class ConferencePlannerTest {
 	@Test
 	public void printTest() {	
 
-		ConferencePlanner planner = ConferencePlanner.conference("Test");
-		Conference conference = planner.build(new Date(), 2, this.talks);
+		Conference conference = ConferencePlanner.planner()
+												.name("test")
+												.startDate(new Date())
+												.trackCountPerDay(2)
+												.talks(talks)
+												.build();
 
 		System.out.println("Confrence : " + conference.getName());
+		System.out.println("************");
 		conference.forEachTrack(newTrackAction());		
 	}
 
@@ -40,6 +45,7 @@ public class ConferencePlannerTest {
 				System.out.println(track.getName() + " on " + DateTimeUtil.getDayString(track.getDate()));
 				System.out.println("=============");
 				track.forEachSession(newSessionAction());
+				System.out.println("=============\n");
 			}
 		};
 	}
