@@ -28,6 +28,6 @@ public class Talk {
 
 	@Override
 	public String toString() {
-		return String.format("%s %s", name, duration);
+		return String.format("%s %s %s", DateTimeUtil.getHourMinuteString(this.start), name, duration);
 	}
 }

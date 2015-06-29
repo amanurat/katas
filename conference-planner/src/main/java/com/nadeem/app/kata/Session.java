@@ -23,8 +23,9 @@ public class Session {
 		if (durationSoFar + taskDuration > this.duration) {
 			throw new IllegalArgumentException("Cant Add Task to this session");
 		}
-		this.durationSoFar = this.durationSoFar + taskDuration; 
-		this.talks.add(newTalk(name, taskDuration, this.start));
+		Talk newTalk = newTalk(name, taskDuration, DateTimeUtil.addMinutes(this.start, this.durationSoFar));
+		this.talks.add(newTalk);
+		this.durationSoFar = this.durationSoFar + taskDuration;	
 	}
 
 	private Talk newTalk(String name, int taskDuration, Date start) {
@@ -39,6 +40,14 @@ public class Session {
 
 	public String getName() {
 		return this.name;
+	}
+	
+	public List<Talk> getTalks() {
+		return this.talks;
+	}
+	
+	public Date getStart() {
+		return this.start;
 	}
 
 }

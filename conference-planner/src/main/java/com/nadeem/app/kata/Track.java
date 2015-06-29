@@ -23,4 +23,8 @@ public class Track {
 	public String getName() {
 		return this.name;
 	}
+	
+	public List<Session> getSessions() {
+		return this.sessions;
+	}
 }

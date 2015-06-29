@@ -20,4 +20,8 @@ public class Conference {
 	public String getName() {
 		return this.name;
 	}
+	
+	public List<Track> getTracks() {
+		return this.tracks;
+	}
 }

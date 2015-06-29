@@ -37,9 +37,9 @@ public class ConferencePlanner {
 			eveningSessionDate = DateTimeUtil.with(start, 17, 0);
 		}
 
-		Session EveningSession = new Session("Evening Session", eveningSessionDate, 60);
-		lunchSession.add("Networking Event", 60);
-		track.addSession(EveningSession);
+		Session eveningSession = new Session("Evening Session", eveningSessionDate, 60);
+		eveningSession.add("Networking Event", 60);
+		track.addSession(eveningSession);
 
 		this.conference.addTrack(track);
 
