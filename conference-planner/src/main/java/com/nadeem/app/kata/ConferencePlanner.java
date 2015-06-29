@@ -103,14 +103,14 @@ public class ConferencePlanner {
 			return session;
 		}
 
-		private static Session addEveningSession(Track track, Date eveningSessionDate) {
+		private Session addEveningSession(Track track, Date eveningSessionDate) {
 			Session session = new Session("Evening Session", eveningSessionDate, DURATION_ONE_HOUR);
 			session.add("Networking Event", 60);
 			track.addSession(session);
 			return session;
 		}
 
-		private static void addTalks(Talks talks, final Session session) {
+		private void addTalks(Talks talks, final Session session) {
 
 			talks.assign(new ResposiveAction<Talk>() {
 

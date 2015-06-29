@@ -5,23 +5,21 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.nadeem.app.kata.Talks.AddAndBuildStep;
-
 public class ConferencePlannerTest {
 
 	private Talks talks;
 
 	@Before
 	public void doBeforeEachTestCase() {
-		AddAndBuildStep tasksBuilder = Talks.builder();
-		tasksBuilder.add("Task one", 30);
-		tasksBuilder.add("Task two", 60);
-		tasksBuilder.add("Task three", 30);
-		tasksBuilder.add("Task four", 60);
-		tasksBuilder.add("Task five", 60);
-		tasksBuilder.add("Task six", 180);
-		tasksBuilder.add("Task seven", 120);
-		this.talks = tasksBuilder.addAndBuild("eight", 120);
+		this.talks = Talks.builder()
+				.add("Task one", 30)
+				.add("Task two", 60)
+				.add("Task three", 30)
+				.add("Task four", 60)
+				.add("Task five", 60)
+				.add("Task six", 180)
+				.add("Task seven", 120)
+				.addAndBuild("eight", 120);
 	}
 
 	@Test
