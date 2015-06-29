@@ -30,18 +30,6 @@ public class Talks {
 		this.talks.add(new Talk(name, duration));
 	}
 
-	public Talk getMax() {
-		return this.talks.poll();
-	}
-
-	public int totalDuration() {
-		int totalDuration = 0;
-		for (Talk talk : talks) {
-			totalDuration = totalDuration + talk.getDuration(); 
-		}
-		return totalDuration;
-	}
-
 	public void assign(ResposiveAction<Talk> action) {
 		for (Iterator<Talk> iterator = talks.iterator(); iterator.hasNext();) {
 			Talk talk = iterator.next();
