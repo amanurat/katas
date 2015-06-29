@@ -20,10 +20,24 @@ public class DateTimeUtil {
 		return cal.getTime();
 	}
 
-	public static Date addMinutes(Date dateTime, int minute) {
+	public static Date addDay(Date dateTime, int days) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(dateTime);
-		cal.add(Calendar.MINUTE, minute);
+		cal.add(Calendar.DAY_OF_MONTH, days);
+		return cal.getTime();
+	}
+
+	public static Date getNextDay(Date dateTime) {
+		return addDay(dateTime, 1);
+	}
+	public static Date getPreviousDay(Date dateTime) {
+		return addDay(dateTime, -1);
+	}
+
+	public static Date addMinutes(Date dateTime, int minutes) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dateTime);
+		cal.add(Calendar.MINUTE, minutes);
 		return cal.getTime();
 	}
 

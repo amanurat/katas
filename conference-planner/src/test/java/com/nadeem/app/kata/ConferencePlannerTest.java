@@ -16,7 +16,7 @@ public class ConferencePlannerTest {
 		Talk three = new Talk("three", 30);
 		Talk four = new Talk("four", 60);
 		Talk five = new Talk("five", 60);
-		Talk six = new Talk("six", 120);
+		Talk six = new Talk("six", 180);
 		Talk seven = new Talk("seven", 120);
 		Talk eight = new Talk("eight", 120);
 
@@ -30,12 +30,13 @@ public class ConferencePlannerTest {
 		talks.add(eight);
 
 		ConferencePlanner planner = ConferencePlanner.conference("Test");
-		Conference conference = planner.build(new Date(), 2, talks);
+		Conference conference = planner.build(new Date(), 1, talks);
+		System.out.println("Confrence : " + conference.getName());
 		for (Track track : conference.getTracks()) {
 			System.out.println(track.getName() + " : " + DateTimeUtil.getDayString(track.getDate()));
 			System.out.println("=============");
 			for (Session session : track.getSessions()) {
-				System.out.println(session.getName() + session.getStart());
+				System.out.println(session.getName()+ " : " + session.getStart());
 				for (Talk talk : session.getTalks()) {
 					System.out.println(talk);
 				}
