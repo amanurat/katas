@@ -2,15 +2,17 @@ package com.nadeem.app.kata;
 
 import java.util.Date;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.nadeem.app.kata.Talks.AddAndBuildStep;
 
 public class ConferencePlannerTest {
 
-	@Test
-	public void printTest() {
+	private Talks talks;
 
+	@Before
+	public void doBeforeEachTestCase() {
 		AddAndBuildStep tasksBuilder = Talks.builder();
 		tasksBuilder.add("Task one", 30);
 		tasksBuilder.add("Task two", 60);
@@ -19,12 +21,16 @@ public class ConferencePlannerTest {
 		tasksBuilder.add("Task five", 60);
 		tasksBuilder.add("Task six", 180);
 		tasksBuilder.add("Task seven", 120);
-		Talks talks = tasksBuilder.addAndBuild("eight", 120);
+		this.talks = tasksBuilder.addAndBuild("eight", 120);
+	}
+
+	@Test
+	public void printTest() {	
 
 		ConferencePlanner planner = ConferencePlanner.conference("Test");
-		Conference conference = planner.build(new Date(), 2, talks);
-		System.out.println("Confrence : " + conference.getName());
+		Conference conference = planner.build(new Date(), 2, this.talks);
 
+		System.out.println("Confrence : " + conference.getName());
 		conference.forEachTrack(newTrackAction());		
 	}
 

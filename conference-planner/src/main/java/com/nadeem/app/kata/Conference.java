@@ -27,4 +27,8 @@ public class Conference {
 			action.call(iterator.next());			
 		}
 	}
+
+	public int trackCount() {
+		return this.tracks.size();
+	}
 }

@@ -22,16 +22,16 @@ public class ConferencePlanner {
 
 		Date confDate = (Date) start.clone();
 
-		while (talks.enoughTasks()) {
+		while (talks.enoughAvailable()) {
 			for (int i = 0; i < numberOfTracksPerDay; i++) {
 				Date trackDate =  atNineAM(confDate);
 				Track track = new Track("Track " + i, trackDate);
 
-				buildMorningSession(talks, trackDate, track);
-				buildLunchSession(trackDate, track);
-				Session afterNoonSession = buildAfterNoonSession(talks, trackDate, track);
+				addMorningSession(track, talks, trackDate);
+				addLunchSession(track, trackDate);
+				Session afterNoonSession = addAfterNoonSession(track, talks, trackDate);
 				Date eveningSessionDate = eveningSessionDate(trackDate, afterNoonSession);
-				buildEveningSession(track, eveningSessionDate);
+				addEveningSession(track, eveningSessionDate);
 
 				this.conference.addTrack(track);
 			}
@@ -41,29 +41,32 @@ public class ConferencePlanner {
 		return this.conference;
 	}
 
-	private void buildMorningSession(Talks talks, Date trackDate, Track track) {
+	private Session addMorningSession(Track track, Talks talks, Date trackDate) {
 		Session session = new Session("Morning Session", atNineAM(trackDate), DURATION_THREE_HOURS);
 		addTalks(talks, session);
 		track.addSession(session);
+		return session;
 	}
 
-	private void buildLunchSession(Date trackDate, Track track) {
+	private Session addLunchSession(Track track, Date trackDate) {
 		Session session = new Session("Lunch Session", atAfterNoon(trackDate), DURATION_ONE_HOUR);
 		session.add("Lunch", 60);
 		track.addSession(session);
+		return session;
 	}
 
-	private Session buildAfterNoonSession(Talks talks, Date trackDate, Track track) {
+	private Session addAfterNoonSession(Track track, Talks talks, Date trackDate) {
 		Session session = new Session("Afternoon Session", atOnePM(trackDate), DURATION_FOUR_HOURS);
 		addTalks(talks, session);
 		track.addSession(session);
 		return session;
 	}
 
-	private void buildEveningSession(Track track, Date eveningSessionDate) {
+	private Session addEveningSession(Track track, Date eveningSessionDate) {
 		Session session = new Session("Evening Session", eveningSessionDate, DURATION_ONE_HOUR);
 		session.add("Networking Event", 60);
 		track.addSession(session);
+		return session;
 	}
 
 	private void addTalks(Talks talks, final Session session) {

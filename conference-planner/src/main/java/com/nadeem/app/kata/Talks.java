@@ -54,7 +54,7 @@ public class Talks {
 		}
 	}
 
-	public boolean enoughTasks() {
+	public boolean enoughAvailable() {
 		return !this.talks.isEmpty();
 	}
 
